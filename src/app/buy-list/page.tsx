@@ -1,14 +1,8 @@
 'use client'
-import { Card, Input, Navbar } from "@/components";
-import React, { useCallback, useState } from "react";
+import { Card, Navbar } from "@/components";
+import React from "react";
 
 const BuyList: React.FC = () => {
-  const [keyword, setKeyword] = useState('')
-
-  const handleSearch = useCallback((e: any) => {
-    setKeyword(() => e.target.value)
-  }, [setKeyword])
-
   return (
     <div className="bg-white min-h-screen">
       <Navbar />

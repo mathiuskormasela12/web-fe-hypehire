@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react";
 const BookList: React.FC = () => {
   const [keyword, setKeyword] = useState('')
 
-  const handleSearch = useCallback((e: any) => {
+  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(() => e.target.value)
   }, [setKeyword])
 
