@@ -9,6 +9,7 @@ const BookList: React.FC = () => {
     setKeyword(() => e.target.value)
   }, [setKeyword])
 
+
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
