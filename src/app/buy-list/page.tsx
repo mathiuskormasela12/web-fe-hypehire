@@ -2,7 +2,7 @@
 import { Card, Input, Navbar } from "@/components";
 import React, { useCallback, useState } from "react";
 
-const BookList: React.FC = () => {
+const BuyList: React.FC = () => {
   const [keyword, setKeyword] = useState('')
 
   const handleSearch = useCallback((e: any) => {
@@ -16,10 +16,7 @@ const BookList: React.FC = () => {
         <div className="container mx-auto">
          <div className="flex items-center">
             <div className="grow-[8]">
-              <h2 className="text-2xl text-slate-800">Books</h2>
-            </div>
-            <div className="grow-[1] hidden md:block">
-              <Input type="search" value={keyword} onChange={handleSearch} placeholder="Book name..." />
+              <h2 className="text-2xl text-slate-800">List of Buy</h2>
             </div>
          </div>
           <div className="mt-5 columns-1 lg:columns-5">  
@@ -28,10 +25,7 @@ const BookList: React.FC = () => {
                 key={index.toString()}
                 img={"https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg"}
                 title="Boruto: Naruto The Next Generation by Masashi"
-                subtitle={`Price: ${100}`}
-                tags={['Fight', 'Fight', 'Fight', 'Fight']}
-                buttonText="Order Now"
-                onClick={() => {}}
+                subtitle={`Price: $${100}`}
               />
             ))}
           </div>
@@ -41,4 +35,4 @@ const BookList: React.FC = () => {
   )
 }
 
-export default BookList
+export default BuyList
