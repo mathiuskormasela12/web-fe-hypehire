@@ -5,6 +5,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images-na.ssl-images-amazon.com'
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9000'
       }
     ]
   }

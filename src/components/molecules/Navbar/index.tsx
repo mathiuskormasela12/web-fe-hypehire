@@ -1,14 +1,28 @@
 'use client'
+import { AppDispatch } from "@/store";
+import { setToken } from "@/store/reducers/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import { CiMenuBurger } from "react-icons/ci";
+import { useDispatch } from "react-redux";
 
 const Navbar: React.FC = () => {
+  const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
   const [toggle, setToggle] = useState(false)
 
   const handleToggle = useCallback(() => {
     setToggle((toggle) => !toggle)
   }, [setToggle])
+
+  const handleLogout = (): void => {
+    dispatch(setToken({
+      accessToken: '',
+      refreshToken: ''
+    }))
+    router.push('/login')
+  }
 
   return (
     <nav className="w-full bg-sky-700 fixed top-0">
@@ -24,15 +38,15 @@ const Navbar: React.FC = () => {
           </li>
           <li className="p-4">
             <Link href={'/buy-list'}>
-              Buy List
+              List of Buy
             </Link>
           </li>
           <li className="p-4">
-            <Link href={'/order-list'}>
-              Ongoing Order
+            <Link href={'/purchased-book'}>
+              Purchased Book
             </Link>
           </li>
-          <li className="p-4">
+          <li className="p-4" onClick={handleLogout}>
             Logout
           </li>
         </ul>
@@ -58,7 +72,7 @@ const Navbar: React.FC = () => {
                 Ongoing Order
               </Link>
             </li>
-            <li className="p-4">
+            <li className="p-4" onClick={handleLogout}>
               Logout
             </li>
           </ul>

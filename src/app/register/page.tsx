@@ -5,8 +5,14 @@ import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IRegisterForm } from "./types";
 import registerSchema from "@/schemas/registerSchema";
+import { useMutation } from "@tanstack/react-query";
+import postRegister from "@/api/POST_Register";
+import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2'
+import { IResponse } from "@/interfaces/IResponse";
 
 const RegisterPage: React.FC = () => {
+  const router = useRouter()
   const {control, handleSubmit, formState: {errors}} = useForm<IRegisterForm>({
     resolver: yupResolver(registerSchema),
     defaultValues: {
@@ -16,8 +22,51 @@ const RegisterPage: React.FC = () => {
     }
   })
 
+  const {isPending, mutate} = useMutation<IResponse, IResponse, IRegisterForm>({
+    mutationFn: postRegister,
+    onSuccess(data) {
+      if(data?.statusCode === 201) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: data.message
+        })
+        setTimeout(() => {
+          router.push('/login')
+        }, 500)
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Warning',
+          text: data.message
+        })
+      }
+    },
+    onError(error) {
+      if(error?.errors?.[0]) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: error.errors[0]
+        })
+      } else if(error?.message) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: error.message
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: error.message
+        })
+      }
+    },
+  })
+
   const handleSubmitForm: SubmitHandler<IRegisterForm> = (data) => {
-    console.info(data)
+    mutate(data)
   }
 
   return (
@@ -84,7 +133,7 @@ const RegisterPage: React.FC = () => {
           />
          </div>
          <div className="mb-3">
-          <Button type="submit" className="text-sm">
+          <Button type="submit" className="text-sm" disabled={isPending}>
             Submit
           </Button>
          </div>

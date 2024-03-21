@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { WrapperStore } from "@/components";
+import TanstackQuery from "@/components/atoms/TanstackQuery";;
+import ReduxWrapper from "@/components/atoms/ReduxWrapper";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <WrapperStore>
-          {children}
-        </WrapperStore>
+        <ReduxWrapper>
+          <TanstackQuery>
+            {children}
+          </TanstackQuery>
+        </ReduxWrapper>
       </body>
     </html>
   );

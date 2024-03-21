@@ -6,4 +6,8 @@ export interface ICardProps {
   tags?: string[]
   onClick?: () => void
   buttonText?: string
+  disabled?: boolean
+  secondOnClick?: () => void
+  secondButtonText?: string
+  secondDisabled?: boolean
 }

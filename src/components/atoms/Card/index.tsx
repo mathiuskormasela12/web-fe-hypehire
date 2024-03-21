@@ -3,7 +3,7 @@ import React from "react";
 import { ICardProps } from "./types";
 import Button from "../Button";
 
-const Card: React.FC<ICardProps> = ({img, title, subtitle , tags, buttonText, onClick}) => {
+const Card: React.FC<ICardProps> = ({img, disabled, title, subtitle , tags, buttonText, onClick, secondButtonText, secondDisabled, secondOnClick}) => {
   return (
     <div className="bg-white w-full border border-slate-300 border-solid overflow-hidden rounded-md mb-5">
       <div className="bg-slate-400 w-full">
@@ -18,8 +18,13 @@ const Card: React.FC<ICardProps> = ({img, title, subtitle , tags, buttonText, on
           ))}
         </div>
         {buttonText && (
-          <Button className="mt-4" onClick={onClick!}>
+          <Button className="mt-4" disabled={disabled!} onClick={onClick!}>
             {buttonText}
+          </Button>
+        )}
+        {secondButtonText && (
+          <Button className="mt-4" disabled={secondDisabled!} onClick={secondOnClick!}>
+            {secondButtonText}
           </Button>
         )}
       </div>

@@ -5,8 +5,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ILoginForm } from "./types";
+import { useMutation } from "@tanstack/react-query";
+import postLogin from "@/api/Post_Login";
+import { IResponse, IResponseWithParams } from "@/interfaces/IResponse";
+import IToken from "@/interfaces/IToken";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
+import { setToken } from "@/store/reducers/auth";
 
 const LoginPage: React.FC = () => {
+  const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
   const {control, handleSubmit, formState: {errors}} = useForm<ILoginForm>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
@@ -15,8 +26,55 @@ const LoginPage: React.FC = () => {
     }
   })
 
+  const {isPending, mutate} = useMutation<IResponseWithParams<IToken>, IResponse, ILoginForm>({
+    mutationFn: postLogin,
+    onSuccess(data) {
+      if(data?.statusCode === 200 && data?.data?.accessToken && data?.data?.refreshToken) {
+        dispatch(setToken({
+          accessToken: data?.data?.accessToken ?? '',
+          refreshToken: data?.data?.refreshToken ?? ''
+        }))
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Login Successfuly'
+        })
+        setTimeout(() => {
+          router.push('/')
+        }, 500)
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Warning',
+          text: data?.message ?? 'Failed to login'
+        })
+      }
+    },
+    onError(error) {
+      if(error?.errors?.[0]) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: error.errors[0]
+        })
+      } else if(error?.message) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: error.message
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: error.message
+        })
+      }
+    },
+  })
+
   const handleSubmitForm: SubmitHandler<ILoginForm> = (data) => {
-    console.info(data)
+    mutate(data)
   }
 
   return (
@@ -64,7 +122,7 @@ const LoginPage: React.FC = () => {
           />
          </div>
          <div className="mb-3">
-          <Button type="submit" className="text-sm">
+          <Button type="submit" className="text-sm" disabled={isPending}>
             Login
           </Button>
          </div>
