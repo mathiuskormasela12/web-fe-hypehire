@@ -74,12 +74,12 @@ const Navbar: React.FC = () => {
             </li>
             <li className="p-4">
               <Link href={'/buy-list'}>
-                Buy List
+                List of Buy
               </Link>
             </li>
             <li className="p-4">
-              <Link href={'/order-list'}>
-                Ongoing Order
+              <Link href={'/purchased-book'}>
+                Purchased Book
               </Link>
             </li>
             <li className="p-4" onClick={handleLogout}>
