@@ -5,7 +5,7 @@ import { Card, Input, Navbar } from "@/components";
 import ORDER_STATUS from "@/constants";
 import { IResponse } from "@/interfaces/IResponse";
 import { RootState } from "@/store";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -21,6 +21,8 @@ const BookList: React.FC = () => {
     setKeyword(() => e.target.value)
   }, [setKeyword])
 
+  const client = useQueryClient()
+
   const {data, isPending} = useQuery({
     queryKey: ['books', { keyword }],
     queryFn: () => getBooks({keyword})
@@ -29,6 +31,7 @@ const BookList: React.FC = () => {
   const updateOrderStatusrMutation = useMutation<IResponse, IResponse, IPostOrderRequest>({
     mutationFn: updateOrderStatus,
     onSuccess(data) {
+      client.invalidateQueries({queryKey: ['logged-in-user']})
       if(data?.statusCode === 200) {
         Swal.fire({
           icon: 'success',

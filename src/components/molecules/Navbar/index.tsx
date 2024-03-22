@@ -1,6 +1,8 @@
 'use client'
+import getUser from "@/api/GET_User";
 import { AppDispatch } from "@/store";
 import { setToken } from "@/store/reducers/auth";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -11,6 +13,11 @@ const Navbar: React.FC = () => {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const [toggle, setToggle] = useState(false)
+
+  const {data} = useQuery({
+    queryKey: ['logged-in-user'],
+    queryFn: getUser
+  })
 
   const handleToggle = useCallback(() => {
     setToggle((toggle) => !toggle)
@@ -49,6 +56,9 @@ const Navbar: React.FC = () => {
           <li className="p-4" onClick={handleLogout}>
             Logout
           </li>
+          <li className="p-4">
+            Your Point: {data?.data?.point ? data.data.point : 0}
+          </li>
         </ul>
         <div className="flex md:hidden flex-1 items-center justify-end"> 
           <CiMenuBurger onClick={handleToggle} color="white" className="text-lg mr-5" />
@@ -74,6 +84,9 @@ const Navbar: React.FC = () => {
             </li>
             <li className="p-4" onClick={handleLogout}>
               Logout
+            </li>
+            <li className="p-4">
+              Your Point: {data?.data?.point ? data.data.point : 0}
             </li>
           </ul>
         </div>

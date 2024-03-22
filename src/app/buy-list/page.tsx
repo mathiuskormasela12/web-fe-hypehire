@@ -72,6 +72,7 @@ const BuyList: React.FC = () => {
     mutationFn: cancelOrder,
     onSuccess(data) {
       queryClient.invalidateQueries({queryKey: ['buy-list']})
+      queryClient.invalidateQueries({queryKey: ['logged-in-user']})
       if(data?.statusCode === 200) {
         Swal.fire({
           icon: 'success',
