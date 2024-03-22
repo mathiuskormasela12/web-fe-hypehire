@@ -5,7 +5,10 @@ import { setToken } from "@/store/reducers/auth";
 
 const apiBaseConfig = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 10000
+  timeout: 10000,
+  headers: {
+    'ngrok-skip-browser-warning': 'true' 
+  }
 })
 
 apiBaseConfig.interceptors.request.use(config => {
